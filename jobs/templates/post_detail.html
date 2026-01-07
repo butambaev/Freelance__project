@@ -1,0 +1,24 @@
+{% extends "jobs/base.html" %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+<h2>{{ post.title }}</h2>
+<p><strong>Автор:</strong> {{ post.author }}</p>
+<p>{{ post.content }}</p>
+
+{% if post.photo %}
+    <img src="{{ post.photo.url }}" alt="{{ post.title }}" width="300">
+{% else %}
+    <img src="/static/default.png" alt="Нет фото" width="300">
+{% endif %}
+
+<p><em>Дата создания: {{ post.created_at }}</em></p>
+<a href="{% url 'post_list' %}">Вернуться к списку проектов</a>
+{% endblock %}
+
+{% if post.photo %}
+    <img src="{{ post.photo.url }}" alt="{{ post.title }}" width="300">
+{% else %}
+    <img src="/static/default.png" alt="Нет фото" width="300">
+{% endif %}

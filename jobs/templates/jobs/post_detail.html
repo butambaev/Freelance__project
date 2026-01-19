@@ -1,24 +1,30 @@
-{% extends "jobs/base.html" %}
-
-{% block title %}{{ post.title }}{% endblock %}
-
+{% extends 'jobs/base.html' %}
 {% block content %}
 <h2>{{ post.title }}</h2>
-<p><strong>Автор:</strong> {{ post.author }}</p>
-<p>{{ post.content }}</p>
+<p>{{ post.description }}</p>
+<p>Цена: {{ post.price }}</p>
+<p>Просмотры: {{ post.views }}</p>
 
-{% if post.photo %}
-    <img src="{{ post.photo.url }}" alt="{{ post.title }}" width="300">
+{% if post.image %}
+    <img src="{{ post.image.url }}" alt="{{ post.title }}">
 {% else %}
-    <img src="/static/default.png" alt="Нет фото" width="300">
+    <img src="/static/default.jpg" alt="Default image">
 {% endif %}
 
-<p><em>Дата создания: {{ post.created_at }}</em></p>
-<a href="{% url 'post_list' %}">Вернуться к списку проектов</a>
+<h3>Комментарии</h3>
+{% for comment in comments %}
+    <p><strong>{{ comment.user.username }}:</strong> {{ comment.content }}</p>
+{% empty %}
+    <p>Пока нет комментариев.</p>
+{% endfor %}
+
+{% if user.is_authenticated %}
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Добавить комментарий</button>
+</form>
+{% else %}
+<p>Войдите чтобы оставить комментарий</p>
+{% endif %}
 {% endblock %}
-
-{% if post.photo %}
-    <img src="{{ post.photo.url }}" alt="{{ post.title }}" width="300">
-{% else %}
-    <img src="/static/default.png" alt="Нет фото" width="300">
-{% endif %}

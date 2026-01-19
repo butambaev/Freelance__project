@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.auth.models import User
+from django.utils import timezone
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
@@ -12,6 +14,15 @@ class Tag(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    bio = models.TextField(blank=True, null=True)
+    avatar = models.ImageField(upload_to='profiles/', blank=True, null=True)
+
+    def __str__(self):
+        return self.user.username
 
 
 class JobPost(models.Model):
@@ -33,7 +44,19 @@ class JobPost(models.Model):
         blank=True,
         null=True
     )
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='job_posts', null=True)
+    views = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.title
+
+
+class Comment(models.Model):
+    post = models.ForeignKey(JobPost, on_delete=models.CASCADE, related_name='comments')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    content = models.TextField()
+    created_at = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return f'Comment by {self.user.username} on {self.post.title}'

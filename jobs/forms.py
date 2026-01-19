@@ -4,7 +4,7 @@ from .models import JobPost
 class JobPostForm(forms.ModelForm):
     class Meta:
         model = JobPost
-        fields = ['title', 'description', 'price', 'image']
+        fields = ['title', 'description', 'price', 'image', 'category']
 
     def clean_title(self):
         title = self.cleaned_data.get('title')
